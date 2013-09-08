@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Simple Order</title>
+  <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.css">
+</head>
+<body>
+  <div class="container">
+
+    <section id="order">
+    </section>
+
+  </div>
+
+  <script id="order-template" type="text/x-handlebars-template">
+    <header class="col-md-12">
+      Invoice #{{id}}<br>
+      Date: {{date}}
+    </header>
+
+    <section id="company" class="col-md-6">
+      <h3>Company info</h3>
+      <address>
+        <strong>{{from.name}}</strong><br>
+        <a href="mailto:{{from.email}}">{{from.email}}</a><br>
+        {{#with from.address}}
+        {{street}}<br>
+        {{zipcode}} - {{city}}, {{country}}<br>
+        {{/with}}
+      </address>
+    </section>
+
+    <section id="customer" class="col-md-6">
+      <h3>Customer info</h3>
+      <address>
+        <strong>{{to.name}}</strong><br>
+        <a href="mailto:{{to.email}}">{{to.email}}</a><br>
+        {{#with to.address}}
+        {{street}}<br>
+        {{zipcode}} - {{city}}, {{country}}</br>
+        {{/with}}
+      </address>
+    </section>
+
+    <section id="order-details" class="col-md-12">
+
+      <p>Title/Summary of invoice</p>
+      <br>
+
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th><small>Transaction Id</small></th>
+            <th><small>Description</small></th>
+            <th><small>Quantity</small></th>
+            <th><small>Unit Price</small></th>
+            <th><small>Amount</small></th>
+          </tr>
+        </thead>
+        <tfoot>
+          <tr>
+            <th class="text-right" colspan="4">SubTotal</th>
+            <th>{{subtotal}}</th>
+          </tr>
+          <tr>
+            <th class="text-right" colspan="4">Taxes</th>
+            <th>
+            {{#each taxes}}
+              <p>{{name}} {{value}}</p>
+            {{/each}}
+            </th>
+          </tr>
+          <tr>
+            <th class="text-right" colspan="4">Total</th>
+            <th>{{total}}</th>
+          </tr>
+        </tfoot>
+        <tbody>
+        {{#each items}}
+          <tr>
+            <td>#{{id}}</td>
+            <td>{{description}}</td>
+            <td>{{qty}}</td>
+            <td>{{unit_price}}</td>
+            <td>{{total_price}}</td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </section>
+
+  </script>
+
+  <script src="/assets/js/jquery-2.0.3.min.js"></script>
+  <script src="/assets/js/handlebars.js"></script>
+  <script src="/assets/js/app.js"></script>
+</body>
+</html>
