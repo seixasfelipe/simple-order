@@ -10,12 +10,13 @@ module SimpleOrder
       pushed = false
       self.each { |h|
         if h[:item] == item
-          h[:qty] += qty 
+          h[:qty] += qty
+          h[:total_price] += (item[:price] * qty)
           pushed = true
         end
       }
       
-      @list_items << { item: item, qty: qty } unless pushed
+      @list_items << { item: item, qty: qty, total_price: (item[:price] * qty) } unless pushed
     end
 
     def length

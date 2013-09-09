@@ -81,7 +81,7 @@ module SimpleOrder
       it "should add an item twice" do
         order.add item, 2
         order.list_items.should have_exactly(1).item
-        order.list_items.first.should be_eql({ item: item, qty: 2})
+        order.list_items.first.should be_eql({ item: item, qty: 2, total_price: (item[:price] * 2)})
       end
 
     end
@@ -98,6 +98,12 @@ module SimpleOrder
         order.add another_item
         order.subtotal.should be_eql 15.50
       end
+
+      it "subtotal should be the sum of one item that was added twice" do
+        order.add item, 2
+        order.subtotal.should be_eql 21.00
+      end
+
     end
 
   end

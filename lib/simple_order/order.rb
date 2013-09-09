@@ -18,7 +18,7 @@ module SimpleOrder
     end
 
     def subtotal
-      @list_items.inject(0) { |sum, item| sum + item[:item][:price] }
+      @list_items.inject(0) { |sum, list_item| sum + (list_item[:total_price]) }
     end
 
     private

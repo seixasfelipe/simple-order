@@ -4,8 +4,8 @@ module SimpleOrder
   describe ListItems do
 
     let(:list_items) { ListItems.new }
-    let(:item) { { name: "item 1" } }
-    let(:another_item) { { name: "item 2" } }
+    let(:item) { { name: "item 1", price: 10.15 } }
+    let(:another_item) { { name: "item 2", price: 5.50 } }
 
     describe "#adding one item" do    
       it "using push method" do
@@ -50,15 +50,23 @@ module SimpleOrder
       list_items.add another_item
 
       list_items.should have_exactly(2).item
-      list_items.first.should be_eql({ item: item, qty: 1})
-      list_items[-1].should be_eql({ item: another_item, qty: 1})
+      list_items.first.should be_eql({ item: item, qty: 1, total_price: item[:price] })
+      list_items[-1].should be_eql({ item: another_item, qty: 1, total_price: another_item[:price] })
+    end
+
+    it "should calculate total price of each item" do
+      list_items.add item
+      list_items.first.should be_eql({ item: item, qty: 1, total_price: item[:price] })
+
+      list_items.add item
+      list_items.first.should be_eql({ item: item, qty: 2, total_price: (item[:price] * 2) })      
     end
 
     private
 
     def validates_addition_of(item, qty)
       list_items.should have_exactly(1).item
-      list_items.first.should be_eql({ item: item, qty: qty})
+      list_items.first.should be_eql({ item: item, qty: qty, total_price: (item[:price] * qty) })
     end
   end
 end
