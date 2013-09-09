@@ -31,20 +31,52 @@ module SimpleOrder
         expect { Order.new(c) }.to raise_error(TypeError)
       end
 
+      it "should have an empty list of items" do
+        order.list_items.should be_a_kind_of ListItems
+        order.list_items.should have_exactly(0).items
+      end
+
     end
 
     describe "#adding items ->" do
 
-      let(:item) { { name: "item 1", unit_price: 10.50 } }
+      let(:item) { { name: "item 1", price: 10.50 } }
 
       it "should add an item" do
         order.add item
         order.list_items.should have_exactly(1).item
-        order.list_items.first.item.should be_eql Item.new(item)
+        order.list_items.first[:item].should be_eql item
       end
 
-      it "should add two items"
-      it "should add an item twice"
+      it "should not add an item without name" do
+        item = { price: 10.50 }
+        expect { order.add item }.to raise_error(ArgumentError, "An item must have a name.")
+      end
+
+      it "should not add an item with empty name" do
+        item = { name: "" }
+        expect { order.add item }.to raise_error(ArgumentError, "An item must have a name.")
+      end
+
+      it "should not add an item without price" do
+        item = { name: "item 1" }
+        expect { order.add item }.to raise_error(ArgumentError, "An item must have a price greater or equals to zero.")
+      end
+
+      it "should not add an item with negative price" do
+        item = { name: "item 1", price: -0.1}
+        expect { order.add item }.to raise_error(ArgumentError, "An item must have a price greater or equals to zero.")
+      end
+
+      it "should allow price equals to 0" do
+        item = { name: "item 1", price: 0}
+        expect { order.add item }.not_to raise_error
+      end
+
+      it "should add only hash items" do
+        item = "this is an item"
+        expect { order.add item }.to raise_error(ArgumentError, "An item must be a hash.")
+      end
 
     end
 

@@ -3,16 +3,29 @@ module SimpleOrder
     attr_reader :date, :customer, :list_items
 
     def initialize(customer, date=Time.now)
-      raise TypeError, "customer parameter must be an object of type Customer" \
+      raise TypeError, "customer parameter must be an object of type Customer." \
         unless customer.is_a? Customer
       
       @customer   = customer
       @date       = date
-      @list_items = []
+      @list_items = ListItems.new
     end
 
     def add(item)
+      validates_item(item)
+
       @list_items << item
+    end
+
+    private
+
+    def validates_item(item)
+      raise ArgumentError, "An item must be a hash." \
+        unless item.is_a? Hash
+      raise ArgumentError, "An item must have a name." \
+        unless item[:name] && item[:name].length > 0
+      raise ArgumentError, "An item must have a price greater or equals to zero." \
+        unless item[:price] && item[:price] >= 0
     end
   end
 end
