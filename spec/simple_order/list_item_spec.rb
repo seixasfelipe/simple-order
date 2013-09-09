@@ -5,6 +5,7 @@ module SimpleOrder
 
     let(:list_items) { ListItems.new }
     let(:item) { { name: "item 1" } }
+    let(:another_item) { { name: "item 2" } }
 
     describe "#adding one item" do    
       it "using push method" do
@@ -42,6 +43,15 @@ module SimpleOrder
         list_items.add item, 2
         validates_addition_of item, 3
       end
+    end
+
+    it "should allow add two different items" do
+      list_items.add item
+      list_items.add another_item
+
+      list_items.should have_exactly(2).item
+      list_items.first.should be_eql({ item: item, qty: 1})
+      list_items[-1].should be_eql({ item: another_item, qty: 1})
     end
 
     private
