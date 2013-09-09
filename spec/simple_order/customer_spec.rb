@@ -12,5 +12,8 @@ module SimpleOrder
     it "should have an email" do
       customer.email.should be_eql "foo@bar.com"
     end
+
+    it "should have a valid name"
+    it "should have a valid email"
   end
 end
