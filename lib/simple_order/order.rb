@@ -11,10 +11,10 @@ module SimpleOrder
       @list_items = ListItems.new
     end
 
-    def add(item)
+    def add(item, qty=1)
       validates_item(item)
 
-      @list_items << item
+      @list_items.push item, qty
     end
 
     private

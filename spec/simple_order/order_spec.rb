@@ -78,6 +78,12 @@ module SimpleOrder
         expect { order.add item }.to raise_error(ArgumentError, "An item must be a hash.")
       end
 
+      it "should add an item twice" do
+        order.add item, 2
+        order.list_items.should have_exactly(1).item
+        order.list_items.first.should be_eql({ item: item, qty: 2})
+      end
+
     end
 
   end

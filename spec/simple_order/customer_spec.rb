@@ -15,5 +15,6 @@ module SimpleOrder
 
     it "should have a valid name"
     it "should have a valid email"
+    it "should have an address"
   end
 end
