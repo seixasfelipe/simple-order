@@ -17,6 +17,10 @@ module SimpleOrder
       @list_items.push item, qty
     end
 
+    def subtotal
+      @list_items.inject(0) { |sum, item| sum + item[:item][:price] }
+    end
+
     private
 
     def validates_item(item)

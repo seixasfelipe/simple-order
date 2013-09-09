@@ -5,6 +5,8 @@ module SimpleOrder
 
     let(:customer) { Customer.new("foo", "foo@bar.com" ) }
     let(:order) { Order.new(customer) }
+    let(:item) { { name: "item 1", price: 10.50 } }
+    let(:another_item) { { name: "item 2", price: 5.00 } }
 
     describe "#basic creation ->" do
 
@@ -39,8 +41,6 @@ module SimpleOrder
     end
 
     describe "#adding items ->" do
-
-      let(:item) { { name: "item 1", price: 10.50 } }
 
       it "should add an item" do
         order.add item
@@ -84,6 +84,20 @@ module SimpleOrder
         order.list_items.first.should be_eql({ item: item, qty: 2})
       end
 
+    end
+
+    describe "#order total -> " do
+
+      it "subtotal should be the sum of an item" do
+        order.add item
+        order.subtotal.should be_eql 10.50
+      end
+
+      it "subtotal should be the sum of two different items" do
+        order.add item
+        order.add another_item
+        order.subtotal.should be_eql 15.50
+      end
     end
 
   end
