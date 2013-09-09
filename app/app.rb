@@ -1,6 +1,10 @@
 require 'sinatra'
 require 'json'
 
+configure do
+  set :public_folder, File.dirname(__FILE__) + '/public'
+end
+
 get '/order' do
   order = {
     id: 'SO030PD',
