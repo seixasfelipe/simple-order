@@ -1,8 +1,24 @@
 require 'sinatra'
 require 'json'
 
-configure do
-  set :public_folder, File.dirname(__FILE__) + '/public'
+set :root, Dir.pwd
+
+set :public_folder, File.join(settings.root, 'app/public')
+set :views, File.join(settings.root, 'app/views')
+
+set :haml, format: :html5, layout: :application
+
+
+get '/' do
+  haml :'order/new'
+end
+
+get '/new' do
+  haml :'order/new'
+end
+
+get '/invoice' do
+  haml :'order/invoice'
 end
 
 get '/order' do

@@ -1,0 +1,77 @@
+%section#order
+
+%script#order-template{ type:'text/x-handlebars-template' }
+  %header.col-md-12
+    Invoice \#{{id}}
+    %br
+    Date: {{date}}
+
+  %section#company.col-md-6
+    %h3 Company Info
+    %address
+      %strong {{from.name}}
+      %br
+      %a{ href:'mailto:{{from.email}}' } {{from.email}}
+      %br
+      {{#with from.address}}
+      {{street}}
+      %br
+      {{zipcode}} - {{city}}, {{country}}
+      %br
+      {{/with}}
+
+  %section#customer.col-md-6
+    %h3 Customer Info
+    %address
+      %strong {{to.name}}
+      %br
+      %a{ href:'mailto:{{to.email}}' } {{to.email}}
+      %br
+      {{#with to.address}}
+      {{street}}
+      %br
+      {{zipcode}} - {{city}}, {{country}}
+      %br
+      {{/with}}      
+
+  %section#order-details.col-md-12
+    %p Title/Summary of invoice
+    %br
+
+    %table.table.table-condensed
+      %thead
+        %tr
+          %th
+            %small Transation Id
+          %th
+            %small Description
+          %th
+            %small Quantity
+          %th
+            %small Unit Price
+          %th
+            %small Amount
+
+      %tfoot
+        %tr
+          %th.text-right{ colspan:'4' } SubTotal
+          %th {{subtotal}}
+        %tr
+          %th.text-right{ colspan: '4'} Taxes
+          %th
+            {{#each taxes}}
+            %p {{name}} {{value}}
+            {{/each}}        
+        %tr
+          %th.text-right{ colspan:'4' } Total
+          %th {{total}}
+
+      %tbody
+        {{#each items}}
+        %tr
+          %td \#{{id}}
+          %td {{description}}
+          %td {{qty}}
+          %td {{unit_price}}
+          %td {{total_price}}
+        {{/each}}
