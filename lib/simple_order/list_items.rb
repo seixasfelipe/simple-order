@@ -31,6 +31,10 @@ module SimpleOrder
       @list_items[val]
     end
 
+    def to_a
+      @list_items
+    end
+
     alias_method :<<  , :push
     alias_method :add , :push
     alias_method :size, :length

@@ -21,6 +21,15 @@ module SimpleOrder
       @list_items.inject(0) { |sum, list_item| sum + (list_item[:total_price]) }
     end
 
+    def to_h
+      {
+        date: @date,
+        customer: @customer.to_h,
+        items: @list_items.to_a,
+        subtotal: subtotal
+      }
+    end
+
     private
 
     def validates_item(item)

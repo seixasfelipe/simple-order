@@ -7,5 +7,12 @@ module SimpleOrder
       @name   = name
       @email  = email
     end
+
+    def to_h
+      {
+        name: @name,
+        email: @email
+      }
+    end
   end
 end

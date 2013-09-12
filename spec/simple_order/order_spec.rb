@@ -106,5 +106,25 @@ module SimpleOrder
 
     end
 
+    it "should be represented as a Hash if needed" do
+      time = Time.parse('2013-09-08 10:33:59')
+      Time.stub now: time
+
+      order.add item
+      order.add another_item
+      order.to_h.should be_eql({
+        date: time,
+        customer: {
+          name: 'foo',
+          email: 'foo@bar.com',
+        },
+        items: [
+          { item: { name: "item 1", price: 10.50 }, qty: 1, total_price: 10.50 },
+          { item: { name: "item 2", price: 5.00 }, qty: 1, total_price: 5.00 }
+        ],
+        subtotal: 15.50
+      })      
+    end
+
   end
 end
