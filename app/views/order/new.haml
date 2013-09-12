@@ -1,1 +1,33 @@
-new order
+%form{ action:'/create', method:'post', role:'form'}
+  %fieldset
+    %legend New Order
+
+    .customer
+      %h3 Customer Info
+      .form-group
+        %label{ for:'customer:name' } Name
+        %input.form-control{ type:'text', id:'customer:name', name:'customer:name'}
+
+      .form-group
+        %label{ for:'customer:email' } Email
+        %input.form-control{ type:'email', id:'customer:email', name:'customer:email'}
+
+    .order-details
+      %h3 Order Details
+
+      .form-group
+        %label{ for:'summary' } Order Summary
+        %input.form-control{ type:'text', id:'summary', name:'summary'}
+
+      %h4 Items
+
+      .form-group
+        %label{ for:'items:name' } Item Name
+        %input.form-control{ type:'text', id:'items:name', name:'items:name'}
+
+      .form-group
+        %label{ for:'items:qty' } Quantity
+        %input.form-control{ type:'text', id:'items:qty', name:'items:qty'}
+
+    %button.btn.btn-primary{ type:'submit' } Create
+    %button.btn.btn-default{ type:'button' } Cancel

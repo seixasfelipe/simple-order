@@ -1,28 +1,65 @@
 require 'sinatra'
 require 'json'
 
-set :root, Dir.pwd
+$:.unshift File.expand_path("../../lib", __FILE__)
+require 'simple_order'
 
-set :public_folder, File.join(settings.root, 'app/public')
-set :views, File.join(settings.root, 'app/views')
 
-set :haml, format: :html5, layout: :application
+configure do
+  set :root, Dir.pwd
 
+  set :public_folder, File.join(settings.root, 'app/public')
+  set :views, File.join(settings.root, 'app/views')
+
+  set :haml, format: :html5, layout: :application
+
+  use Rack::Session::Pool
+end
 
 get '/' do
-  haml :'order/new'
+  redirect to('/new')
 end
 
 get '/new' do
   haml :'order/new'
 end
 
+post '/create' do
+  puts params
+  customer  = SimpleOrder::Customer.new(params['customer:name'], params['customer:email'])
+  order     = SimpleOrder::Order.new(customer)
+
+  add_order order
+
+  redirect to('/new')
+end
+
 get '/invoice' do
   haml :'order/invoice'
 end
 
-get '/order' do
-  order = {
+get '/order/:id' do
+  content_type :json
+  
+  order = get_order params[:id].to_i
+  order.to_h.to_json
+end
+
+def add_order(order)
+  session[:orders] = [] unless session[:orders]
+  session[:orders].push order
+  order
+end
+
+def get_order(id)
+  orders = session[:orders]
+  return nil unless orders
+  return nil if orders && id > orders.size
+  orders[id - 1]
+end
+
+def fake_order
+  {
     id: 'SO030PD',
     date: Time.now, 
     from: {
@@ -59,6 +96,4 @@ get '/order' do
     subtotal: 382.85,
     total: 440.17
   }
-  
-  [200, { 'Content-Type' => 'application/json' }, [order.to_json] ]
 end
