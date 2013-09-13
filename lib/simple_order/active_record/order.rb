@@ -1,7 +1,9 @@
 module SimpleOrder
   module AR
     class Order < ActiveRecord::Base
-      validates_presence_of :date
+      validates_presence_of :date, :customer
+
+      belongs_to :customer
 
       after_initialize :init
 
