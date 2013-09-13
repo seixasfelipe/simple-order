@@ -8,7 +8,6 @@ module SimpleOrder
       def init
         self.date  ||= Time.now
       end
-
     end
   end
 end

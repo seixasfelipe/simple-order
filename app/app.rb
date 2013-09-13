@@ -29,8 +29,8 @@ end
 
 post '/create' do
   puts params
-  customer  = SimpleOrder::Customer.new(params['customer:name'], params['customer:email'])
-  order     = SimpleOrder::Order.new(customer)
+  customer  = SimpleOrder::Basic::Customer.new(params['customer:name'], params['customer:email'])
+  order     = SimpleOrder::Basic::Order.new(customer)
 
   add_order order
 
