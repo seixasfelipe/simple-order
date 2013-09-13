@@ -4,6 +4,7 @@ require 'json'
 $:.unshift File.expand_path("../../lib", __FILE__)
 require 'simple_order'
 
+require "sinatra/activerecord"
 
 configure do
   set :root, Dir.pwd
@@ -12,6 +13,8 @@ configure do
   set :views, File.join(settings.root, 'app/views')
 
   set :haml, format: :html5, layout: :application
+
+  set :database_file, "db/database.yml"
 
   use Rack::Session::Pool
 end
