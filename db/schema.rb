@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130913232531) do
+ActiveRecord::Schema.define(version: 20131102000146) do
 
   create_table "customers", force: true do |t|
     t.string   "name"
@@ -18,6 +18,27 @@ ActiveRecord::Schema.define(version: 20130913232531) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "items", force: true do |t|
+    t.string   "name"
+    t.integer  "qty"
+    t.decimal  "unit_price"
+    t.integer  "line_item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "items", ["line_item_id"], name: "index_items_on_line_item_id"
+
+  create_table "line_items", force: true do |t|
+    t.string   "name"
+    t.decimal  "total_price"
+    t.integer  "order_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "line_items", ["order_id"], name: "index_line_items_on_order_id"
 
   create_table "orders", force: true do |t|
     t.datetime "date"
