@@ -10,6 +10,7 @@ module SimpleOrder
         li = LineItem.new()
         li.name = "products"
         li.items << Item.new({ name: "product 1", qty: 2, unit_price: 10, line_item: li })
+        li.items << Item.new({ name: "product 2", qty: 5, unit_price: 5, line_item: li })
         li
       }
 
@@ -44,6 +45,11 @@ module SimpleOrder
       it "should have at least one line item" do
         expect(order).not_to be_valid
         expect(order.errors[:line_items]).to have(1).errors
+      end
+
+      it "should calculate subtotal price" do
+        order.line_items << line_item
+        expect(order.subtotal).to be_eql(45.00)
       end
     end
   end

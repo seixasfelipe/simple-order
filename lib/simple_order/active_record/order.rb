@@ -12,6 +12,12 @@ module SimpleOrder
       def default_values
         self.date  ||= Time.now
       end
+
+      def subtotal
+        self.line_items.inject(0) do |s, i|
+          s + i.total_price
+        end
+      end
     end
   end
 end
