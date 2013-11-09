@@ -14,8 +14,22 @@ module SimpleOrder
       end
 
       def subtotal
-        self.line_items.inject(0) do |s, i|
-          s + i.total_price
+        self.line_items.inject(0.0) do |s, i|
+          return s + i.total_price if i.name == "products"
+          s
+        end
+      end
+
+      def total
+        (self.subtotal * (1 + total_taxes)).round(2)
+      end
+
+      private
+
+      def total_taxes
+        self.line_items.inject(0.0) do |s, i|
+          return s + (i.total_price / 100) if i.name == "taxes"
+          s
         end
       end
     end

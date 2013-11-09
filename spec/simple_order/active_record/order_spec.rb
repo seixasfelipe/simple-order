@@ -6,12 +6,15 @@ module SimpleOrder
 
       subject(:customer) { Customer.new }
       subject(:order) { Order.new }
-      subject(:line_item) { 
+      subject(:line_item_products) { 
         li = LineItem.new()
         li.name = "products"
         li.items << Item.new({ name: "product 1", qty: 2, unit_price: 10, line_item: li })
         li.items << Item.new({ name: "product 2", qty: 5, unit_price: 5, line_item: li })
         li
+      }
+      subject(:line_item_taxes) {
+        li = LineItem.new({ name: "taxes" })
       }
 
       it "should have a date" do
@@ -25,7 +28,7 @@ module SimpleOrder
         Time.stub now: time
 
         order.customer = customer
-        order.line_items << line_item
+        order.line_items << line_item_products
 
         expect(order).to be_valid
         expect(order).to have(:no).errors
@@ -48,8 +51,19 @@ module SimpleOrder
       end
 
       it "should calculate subtotal price" do
-        order.line_items << line_item
-        expect(order.subtotal).to be_eql(45.00)
+        order.line_items << line_item_products
+        expect(order.subtotal).to eq(45.0)
+      end
+
+      it "should calculate including two taxes" do
+        order.line_items << line_item_products
+
+        line_item_taxes.items << Item.new({ name: "GST", qty: 1, unit_price: 5, line_item: line_item_taxes })
+        line_item_taxes.items << Item.new({ name: "QST", qty: 1, unit_price: 9.975, line_item: line_item_taxes })
+        order.line_items << line_item_taxes
+        
+        expect(order.subtotal).to be_eql(45.0)
+        expect(order.total).to eq(45.0 + 6.74)
       end
     end
   end
