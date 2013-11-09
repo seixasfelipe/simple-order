@@ -1,3 +1,3 @@
 require File.join(File.dirname(__FILE__), 'app/app')
 
-run Sinatra::Application
+run SimpleOrder::Api::Base

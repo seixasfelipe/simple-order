@@ -1,6 +1,6 @@
-ENV['RACK_ENV']='test'
+ENV['RACK_ENV'] = 'test'
 
 require 'simple_order'
 
-$:.unshift File.expand_path("../../app", __FILE__)
-require 'app'
+dbconfig = YAML.load(File.read("db/database.yml"))
+ActiveRecord::Base.establish_connection dbconfig[ENV['RACK_ENV']]
