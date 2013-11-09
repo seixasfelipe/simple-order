@@ -55,6 +55,12 @@ module SimpleOrder
         expect(order.subtotal).to eq(45.0)
       end
 
+      it "should have total as same as subtotal if no taxes is applied" do
+        order.line_items << line_item_products
+        expect(order.subtotal).to be_eql(45.0)
+        expect(order.total).to be_eql(45.0)        
+      end
+
       it "should calculate including two taxes" do
         order.line_items << line_item_products
 
