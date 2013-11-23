@@ -1,25 +1,46 @@
-require 'sinatra'
+ENV['RACK_ENV'] ||= 'development'
+ 
+require 'bundler'
+Bundler.require :default, ENV['RACK_ENV'].to_sym
+
+require 'sinatra/base'
+require 'sinatra/namespace'
 require 'json'
 
 $:.unshift File.expand_path("../../lib", __FILE__)
 require 'simple_order'
 
-require "sinatra/activerecord"
-
 
 module SimpleOrder::Api
   class Base < ::Sinatra::Base
+
+    register Sinatra::ActiveRecordExtension
+
     configure do
       set :root, Dir.pwd
 
       set :public_folder, File.join(settings.root, 'app/public')
       set :views, File.join(settings.root, 'app/views')
-
       set :haml, format: :html5, layout: :application
 
-      set :database_file, "db/database.yml"
+      set :database_file, 'db/database.yml'
 
       use Rack::Session::Pool
+
+      # Register plugins
+      register ::Sinatra::Namespace
+
+      # Set default content type to json
+      before do
+        content_type :json
+      end
+    end
+
+    namespace '/api' do
+      get '/customers' do
+        customers = SimpleOrder::AR::Customer.all.map { |c| { id: c.id, name: c.name, email: c.email } }
+        { status: 'success', customers: customers }.to_json
+      end
     end
 
     get '/' do
