@@ -2,14 +2,20 @@ source 'https://rubygems.org'
 
 gem 'sinatra'
 gem 'sinatra-contrib'
-gem 'haml'
+
+gem 'thin'
+gem 'haml' # remove later when using only API (json responses)
 gem 'activerecord'
 gem 'sinatra-activerecord'
-gem 'thin'
-
-gem 'sqlite3', groups: [:development, :test]
 
 group :test do
-  gem 'rspec'
+  gem 'rspec',        '~> 2.14'
+  gem 'factory_girl', '~> 4.3' 
   gem 'rack-test'
+  gem 'rerun',        '~> 0.8.2'
+  gem 'rb-fsevent',   '~> 0.9.3'
+end
+
+group :development, :test do
+  gem 'sqlite3'
 end
