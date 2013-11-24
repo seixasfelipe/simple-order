@@ -5,6 +5,7 @@ gem 'sinatra-contrib'
 gem 'haml'
 gem 'activerecord'
 gem 'sinatra-activerecord'
+gem 'thin'
 
 gem 'sqlite3', groups: [:development, :test]
 

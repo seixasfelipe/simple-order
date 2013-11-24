@@ -10,6 +10,26 @@ require 'json'
 $:.unshift File.expand_path("../../lib", __FILE__)
 require 'simple_order'
 
+module Rack
+  class JsonResponse
+    def initialize(app)
+      @app = app
+    end
+
+    def call(env)
+      status, headers, body = @app.call(env)
+      contentType = headers['Content-Type']
+      
+      # Converts response body to json format
+      if contentType && contentType =~ /application\/json/
+        body = [body.to_json]
+      end
+
+      [status, headers, body]
+    end
+  end
+end
+
 
 module SimpleOrder::Api
   class Base < ::Sinatra::Base
@@ -26,20 +46,24 @@ module SimpleOrder::Api
       set :database_file, 'db/database.yml'
 
       use Rack::Session::Pool
+      use Rack::Lint
+      use Rack::JsonResponse
 
       # Register plugins
       register ::Sinatra::Namespace
+
+    end
+
+    namespace '/api' do
 
       # Set default content type to json
       before do
         content_type :json
       end
-    end
 
-    namespace '/api' do
       get '/customers' do
         customers = SimpleOrder::AR::Customer.all.map { |c| { id: c.id, name: c.name, email: c.email } }
-        { status: 'success', customers: customers }.to_json
+        { status: "success", customers: customers }
       end
     end
 
@@ -65,11 +89,13 @@ module SimpleOrder::Api
       haml :'order/invoice'
     end
 
-    get '/order/:id' do
-      content_type :json
-      
+    get '/order', provides: 'json' do
+      fake_order
+    end
+
+    get '/order/:id', provides: 'json' do
       order = get_order params[:id].to_i
-      order.to_h.to_json
+      order.to_h
     end
 
     def add_order(order)
@@ -79,6 +105,7 @@ module SimpleOrder::Api
     end
 
     def get_order(id)
+      return fake_order if id <= 0
       orders = session[:orders]
       return nil unless orders
       return nil if orders && id > orders.size
