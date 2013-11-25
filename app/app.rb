@@ -1,4 +1,4 @@
-ENV['RACK_ENV'] ||= 'development'
+RACK_ENV = ENV['RACK_ENV'] ||= 'development'
  
 require 'bundler'
 Bundler.require :default, ENV['RACK_ENV'].to_sym
@@ -44,6 +44,7 @@ module SimpleOrder::Api
       set :haml, format: :html5, layout: :application
 
       set :database_file, 'db/database.yml'
+      ActiveRecord::Base.logger = Logger.new(File.open("log/#{RACK_ENV}.db.log", "a+"))
 
       use Rack::Session::Pool
       use Rack::Lint
